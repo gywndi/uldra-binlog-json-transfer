@@ -59,7 +59,6 @@ public class Main implements Callable<Integer> {
 			binlog = Binlog.read(config.getBinlogInfoFile());
 		} catch (Exception e) {
 		}
-		binlog = new Binlog("binlog.000001", 155);
 		mysqlBinlogServer.start(binlog);
 	}
 }
