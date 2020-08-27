@@ -1,6 +1,6 @@
 # uldra-binlog-json-transfer
 
-<img src="images/overview.png" width="800">
+<img src="overview.png" width="800">
 
 ## uldra-binlog-json-transfer is 
 1. MySQL Binlog parser
