@@ -9,7 +9,7 @@
 
 ## build & run
     mvn install
-    java -jar ./target/uldra-binlog-json-transfer-0.0.1-jar-with-dependencies.jar --config-file=config.yml
+    java -jar target/uldra-binlog-json-transfer-0.1-jar-with-dependencies.jar --config-file=config.yml
 
 ## replicate policy (config.yml)
     workerCount: 16
