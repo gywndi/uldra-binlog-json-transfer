@@ -1,18 +1,12 @@
 package net.gywn.json.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.map.CaseInsensitiveMap;
-
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-import net.gywn.json.common.BinlogPolicy;
 import net.gywn.json.common.UldraUtil;
 
 @Getter

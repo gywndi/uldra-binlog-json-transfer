@@ -1,6 +1,5 @@
 package net.gywn.json.beans;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,9 +7,11 @@ import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class Binlog implements Comparable<Binlog> {
 	private static final Logger logger = LoggerFactory.getLogger(Binlog.class);
 
