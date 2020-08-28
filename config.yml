@@ -1,0 +1,46 @@
+workerCount: 16
+wokerQueueSize: 100
+exporterPort: 42000
+
+binlogServer: 127.0.0.1
+binlogServerPort: 3306
+binlogServerID: 5
+binlogServerUsername: repl
+binlogServerPassword: repl
+binlogInfoFile: "binlog.info"
+
+lookupDS:
+  !!org.apache.commons.dbcp2.BasicDataSource
+  url: jdbc:mysql://127.0.0.1:3306/origin?autoReconnect=true&cacheServerConfiguration=true&useLocalSessionState=true&elideSetAutoCommits=true&connectTimeout=3000&socketTimeout=60000&useSSL=false&useAffectedRows=true&cacheCallableStmts=true&noAccessToProcedureBodies=true&characterEncoding=utf8&characterSetResults=utf8&connectionCollation=utf8_bin&sessionVariables=SQL_MODE='NO_AUTO_VALUE_ON_ZERO'
+  username: origin
+  password: origin
+  maxTotal: 30
+  maxWaitMillis: 100
+  validationQuery: SELECT 1
+  testOnBorrow: false
+  testOnReturn: false
+  testWhileIdle: true
+  timeBetweenEvictionRunsMillis: 60000
+  minEvictableIdleTimeMillis : 1200000
+  numTestsPerEvictionRun : 10
+
+targetDS:
+  !!org.apache.commons.dbcp2.BasicDataSource
+  url: jdbc:mysql://127.0.0.1:3306/target?autoReconnect=true&cacheServerConfiguration=true&useLocalSessionState=true&elideSetAutoCommits=true&connectTimeout=3000&socketTimeout=60000&useSSL=false&useAffectedRows=true&cacheCallableStmts=true&noAccessToProcedureBodies=true&characterEncoding=utf8&characterSetResults=utf8&connectionCollation=utf8_bin&sessionVariables=SQL_MODE='NO_AUTO_VALUE_ON_ZERO'
+  username: target
+  password: target
+  maxTotal: 30
+  maxWaitMillis: 100
+  validationQuery: SELECT 1
+  testOnBorrow: false
+  testOnReturn: false
+  testWhileIdle: true
+  timeBetweenEvictionRunsMillis: 60000
+  minEvictableIdleTimeMillis : 1200000
+  numTestsPerEvictionRun : 10
+
+binlogPolicies:
+- name: "origin.user1"
+  targetTable: "t_user_json1"
+- name: "origin.user2"
+  targetTable: "t_user_json2"
