@@ -67,7 +67,6 @@ public class MysqlBinlogServer {
 			binaryLogClient.setServerId(config.getBinlogServerID());
 			binaryLogClient.registerEventListener(new EventListener() {
 				public void onEvent(Event event) {
-					System.out.println(event);
 					EventType eventType = event.getHeader().getEventType();
 					MysqlBinlogEventHandler.valuOf(eventType).receiveEvent(event, mysqlBinlogServer);
 				}
