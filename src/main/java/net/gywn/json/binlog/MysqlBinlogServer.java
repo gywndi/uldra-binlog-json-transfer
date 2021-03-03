@@ -67,6 +67,7 @@ public class MysqlBinlogServer {
 			binaryLogClient.setServerId(config.getBinlogServerID());
 			binaryLogClient.registerEventListener(new EventListener() {
 				public void onEvent(Event event) {
+					System.out.println(event);
 					EventType eventType = event.getHeader().getEventType();
 					MysqlBinlogEventHandler.valuOf(eventType).receiveEvent(event, mysqlBinlogServer);
 				}
@@ -100,6 +101,7 @@ public class MysqlBinlogServer {
 			if (binlog != null) {
 				binaryLogClient.setBinlogFilename(binlog.getBinlogFile());
 				binaryLogClient.setBinlogPosition(binlog.getBinlogPosition());
+
 			}
 
 			// =========================
@@ -202,8 +204,8 @@ public class MysqlBinlogServer {
 				}
 				rs.close();
 				pstmt.close();
-				
-				if(columns.size() == 0) {
+
+				if (columns.size() == 0) {
 					throw new Exception("Target table not found");
 				}
 

@@ -86,20 +86,29 @@ public class MysqlBinlogWorker {
 								// ====================
 								String lookupQuery = String.format(BASE_LOOKUP_QUERY,
 										binlogOperation.getBinlogTable().getName());
-								for (BinlogColumn column : binlogOperation.getBinlogTable().getRowKeys()) {
+
+								for (int i = 0; i < binlogOperation.getBinlogTable().getRowKeys().size(); i++) {
+									BinlogColumn column = binlogOperation.getBinlogTable().getRowKeys().get(i);
+									if (binlogOperation.getData().get(column.getName()) == null) {
+										lookupQuery += String.format(" and %s = default(%s)", column.getName(),
+												column.getName());
+										continue;
+									}
 									lookupQuery += String.format(" and %s = ?", column.getName());
 								}
 
 								PreparedStatement pstmtLookup = conn.prepareStatement(lookupQuery);
 								for (int i = 0; i < binlogOperation.getBinlogTable().getRowKeys().size(); i++) {
 									BinlogColumn column = binlogOperation.getBinlogTable().getRowKeys().get(i);
+									if (binlogOperation.getData().get(column.getName()) == null) {
+										continue;
+									}
 									pstmtLookup.setString(i + 1, binlogOperation.getData().get(column.getName()));
 								}
 
 								ResultSet rs = pstmtLookup.executeQuery();
-								Map<String, String> map = null;
+								boolean exists = false;
 								if (rs.next()) {
-									map = new HashMap<String, String>();
 									ResultSetMetaData rsMeta = rs.getMetaData();
 									for (int i = 1; i <= rsMeta.getColumnCount(); i++) {
 										String key = rsMeta.getColumnLabel(i).toLowerCase();
@@ -120,8 +129,9 @@ public class MysqlBinlogWorker {
 										default:
 											val = rs.getString(i);
 										}
-										map.put(key, val);
+										binlogOperation.getData().put(key, val);
 									}
+									exists = true;
 								}
 								pstmtLookup.close();
 								conn.close();
@@ -130,12 +140,12 @@ public class MysqlBinlogWorker {
 								// target query
 								// ====================
 								conn = targetDS.getConnection();
-								if (map != null) {
+								if (exists) {
 									String insertQuery = String.format(BASE_INSERT_QUERY,
 											binlogOperation.getBinlogTable().getBinlogPolicy().getTargetTable());
 									PreparedStatement pstmtInsert = conn.prepareStatement(insertQuery);
 									pstmtInsert.setString(1, binlogOperation.getKey());
-									pstmtInsert.setString(2, gson.toJson(map));
+									pstmtInsert.setString(2, gson.toJson(binlogOperation.getData()));
 									pstmtInsert.executeUpdate();
 									pstmtInsert.close();
 								} else {
