@@ -164,7 +164,7 @@ public class MysqlBinlogServer {
 		// Binlog policy
 		String database = tableMapEventData.getDatabase();
 		String table = tableMapEventData.getTable();
-		String name = String.format("%s.%s", database, table);
+		String name = BinlogTable.getTableName(database, table);
 		BinlogPolicy binlogPolicy = config.getBinlogPolicyMap().get(name);
 
 		Connection connection = null;

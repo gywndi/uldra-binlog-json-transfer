@@ -133,15 +133,15 @@ public enum MysqlBinlogEventHandler {
 
 			TableMapEventData eventData = (TableMapEventData) event.getData();
 			Map<Long, BinlogTable> binlogTableMap = mysqlBinlogServer.getBinlogTableMap();
-
-			if (binlogTableMap.containsKey(eventData.getTableId())) {
+			BinlogTable binlogTable = binlogTableMap.get(eventData.getTableId());
+			if (binlogTable != null && binlogTable.equalsTable(eventData)) {
 				logger.debug(eventData.getTableId() + " exists in cache");
 				return;
 			}
 
 			// get table info from database
 			logger.info(eventData.getTable() + ":" + eventData.getTableId() + " not in cache");
-			BinlogTable binlogTable = mysqlBinlogServer.getBinlogTable(eventData);
+			binlogTable = mysqlBinlogServer.getBinlogTable(eventData);
 
 			// remove cache same full name (db.tb)
 			for (Entry<Long, BinlogTable> entry : binlogTableMap.entrySet()) {
