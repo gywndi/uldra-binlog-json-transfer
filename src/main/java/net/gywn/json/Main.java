@@ -37,7 +37,7 @@ public class Main implements Callable<Integer> {
 		// =============================
 		File file = new File(configFile);
 		if (!file.exists()) {
-			System.out.println("Config file not exists");
+			logger.error("Config file not exists");
 			return 1;
 		}
 
